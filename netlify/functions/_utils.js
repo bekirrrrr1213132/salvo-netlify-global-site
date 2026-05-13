@@ -2,8 +2,8 @@ import { getStore } from '@netlify/blobs';
 import crypto from 'node:crypto';
 
 // Netlify API Token ve SiteID
-export const siteID = "admirable-torte-ed4c91"; // Netlify'deki siteID
-export const token = "nfp_BFFsTWycEz4pmyR9EEvTsuTp1XXEds2Kae3f"; // API token
+export const siteID = "admirable-torte-ed4c91";  // Netlify'deki siteID
+export const token = "nfp_BFFsTWycEz4pmyR9EEvTsuTp1XXEds2Kae3f";  // API token
 
 // Netlify Blobs store oluşturulurken siteID ve token’ı sağla
 const store = getStore('salvo-site-data', { siteID, token });
