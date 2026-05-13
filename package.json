@@ -1,0 +1,9 @@
+{
+  "name": "salvo-metin2-netlify-global-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "latest"
+  }
+}

@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salvo Metin2 Topluluğu</title>
+  <style>
+    :root {
+      --bg: #05060b;
+      --bg-soft: #0d101b;
+      --card: rgba(14, 17, 31, 0.78);
+      --card-strong: rgba(20, 23, 39, 0.95);
+      --gold: #d9a93a;
+      --gold-light: #ffe08a;
+      --red: #8d1f2d;
+      --text: #f7f1e7;
+      --muted: #aaa4b5;
+      --line: rgba(217, 169, 58, 0.34);
+      --danger: #ff5d68;
+      --success: #54e7a4;
+      --shadow: 0 30px 90px rgba(0, 0, 0, 0.48);
+      --radius: 28px;
+      --side-banner-width: clamp(150px, 13vw, 245px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -4;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 224, 138, 0.18), transparent 34%),
+        radial-gradient(circle at 10% 18%, rgba(141, 31, 45, 0.34), transparent 30%),
+        radial-gradient(circle at 90% 18%, rgba(80, 50, 180, 0.23), transparent 30%),
+        linear-gradient(145deg, #05060a 0%, #0b0e18 45%, #05060a 100%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black, transparent 84%);
+    }
+
+    .animated-glow {
+      position: fixed;
+      inset: -20%;
+      z-index: -3;
+      pointer-events: none;
+      background:
+        conic-gradient(from 0deg at 50% 50%,
+          rgba(217,169,58,0.16),
+          rgba(141,31,45,0.2),
+          rgba(74,47,150,0.14),
+          rgba(217,169,58,0.16));
+      filter: blur(70px);
+      opacity: 0.58;
+      animation: rotateGlow 22s linear infinite;
+    }
+
+    @keyframes rotateGlow {
+      to { transform: rotate(360deg); }
+    }
+
+    .media-background,
+    .video-background {
+      position: fixed;
+      inset: 0;
+      z-index: -5;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 1;
+      display: none;
+    }
+
+    .background-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: rgba(0, 0, 0, 0.52);
+      backdrop-filter: blur(1px);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .side-banner {
+      position: fixed;
+      top: 18px;
+      bottom: 18px;
+      width: var(--side-banner-width);
+      z-index: 5;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(217, 169, 58, 0.34);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.09), transparent),
+        rgba(9, 11, 20, 0.72);
+      box-shadow: 0 28px 90px rgba(0,0,0,0.48), 0 0 45px rgba(217,169,58,0.12);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .side-banner:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,224,138,0.68);
+    }
+
+    .side-banner.left {
+      left: 18px;
+    }
+
+    .side-banner.right {
+      right: 18px;
+    }
+
+    .side-banner a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .side-banner img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .side-banner .placeholder {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 18px;
+      color: rgba(247,241,231,0.58);
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background:
+        linear-gradient(135deg, rgba(217,169,58,0.18), rgba(141,31,45,0.18)),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,0.05) 0 8px, transparent 8px 18px);
+    }
+
+    .side-banner .banner-caption {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border-radius: 18px;
+      padding: 11px 12px;
+      text-align: center;
+      background: rgba(0,0,0,0.64);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-weight: 900;
+      color: var(--gold-light);
+      backdrop-filter: blur(10px);
+    }
+
+    .page {
+      width: min(1020px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 42px 0 46px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 22px 16px 46px;
+    }
+
+    .logo-frame {
+      width: 166px;
+      height: 166px;
+      border-radius: 999px;
+      padding: 7px;
+      background:
+        linear-gradient(135deg, var(--gold-light), var(--gold), #704a14),
+        linear-gradient(180deg, rgba(255,255,255,0.18), transparent);
+      box-shadow:
+        0 0 0 1px rgba(255, 224, 138, 0.28),
+        0 0 50px rgba(217, 169, 58, 0.25),
+        var(--shadow);
+      position: relative;
+    }
+
+    .logo-frame::after {
+      content: "";
+      position: absolute;
+      inset: -14px;
+      border-radius: inherit;
+      border: 1px solid rgba(217, 169, 58, 0.18);
+      filter: blur(0.2px);
+    }
+
+    .main-logo {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      object-fit: cover;
+      display: block;
+      background: #111522;
+      border: 4px solid #070911;
+    }
+
+    .hero h1 {
+      margin-top: 24px;
+      font-size: clamp(2.1rem, 6vw, 4.35rem);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      line-height: 0.95;
+      text-shadow: 0 6px 30px rgba(217, 169, 58, 0.18);
+    }
+
+    .hero h1 span {
+      display: block;
+      color: var(--gold-light);
+    }
+
+    .hero p {
+      margin-top: 14px;
+      color: var(--muted);
+      max-width: 620px;
+      font-size: 1.05rem;
+    }
+
+    .divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 18px;
+      align-items: center;
+      margin: 28px 0 24px;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: "";
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--line), transparent);
+    }
+
+    .divider-title {
+      position: relative;
+      padding: 10px 20px;
+      border: 1px solid rgba(217, 169, 58, 0.28);
+      border-radius: 999px;
+      background: rgba(12, 14, 24, 0.72);
+      color: var(--gold-light);
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.88rem;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+    }
+
+    .section-card {
+      padding: clamp(18px, 3vw, 30px);
+      border: 1px solid rgba(217, 169, 58, 0.16);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.065), transparent),
+        var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(20px);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .section-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at top left, rgba(217, 169, 58, 0.15), transparent 30%),
+        linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.04) 45%, transparent 75%);
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .social-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .server-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+
+    .tile {
+      min-height: 178px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.025)),
+        rgba(8, 10, 17, 0.72);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      padding: 18px;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tile::after {
+      content: "";
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      top: -60px;
+      right: -50px;
+      border-radius: 999px;
+      background: rgba(217, 169, 58, 0.12);
+      filter: blur(8px);
+    }
+
+    .tile:hover {
+      transform: translateY(-8px);
+      border-color: rgba(217, 169, 58, 0.42);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.36), 0 0 36px rgba(217, 169, 58, 0.1);
+    }
+
+    .platform-icon,
+    .server-logo {
+      width: 72px;
+      height: 72px;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .platform-icon svg {
+      width: 44px;
+      height: 44px;
+    }
+
+    .server-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .server-logo.empty {
+      border-style: dashed;
+      color: rgba(245,240,232,0.45);
+      font-weight: 800;
+      font-size: 0.82rem;
+      text-align: center;
+      padding: 8px;
+    }
+
+    .tile-title {
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tile-subtitle {
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .button-cover {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      border-radius: inherit;
+      outline: none;
+    }
+
+    .button-cover:focus-visible {
+      box-shadow: inset 0 0 0 2px var(--gold-light);
+    }
+
+    .site-footer {
+      text-align: center;
+      margin-top: 34px;
+      padding: 20px 14px 0;
+      color: rgba(247,241,231,0.56);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .admin-panel {
+      display: none;
+      width: min(1120px, calc(100% - 28px));
+      margin: 42px auto 72px;
+      position: relative;
+      z-index: 12;
+    }
+
+    .admin-panel.visible {
+      display: block;
+    }
+
+    .admin-box {
+      background: rgba(9, 11, 20, 0.96);
+      border: 1px solid rgba(217, 169, 58, 0.24);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 3vw, 34px);
+    }
+
+    .admin-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .admin-head h2 {
+      font-size: clamp(1.5rem, 4vw, 2.6rem);
+      color: var(--gold-light);
+    }
+
+    .admin-head p,
+    .hint {
+      color: var(--muted);
+      margin-top: 5px;
+      line-height: 1.55;
+    }
+
+    .admin-grid {
+      display: grid;
+      gap: 20px;
+    }
+
+    .admin-section {
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 18px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .admin-section h3 {
+      margin-bottom: 14px;
+      color: var(--gold-light);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.28);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 12px 13px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .field input[type="file"] {
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    .field input[type="range"] {
+      accent-color: var(--gold);
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color: rgba(217, 169, 58, 0.65);
+      box-shadow: 0 0 0 4px rgba(217, 169, 58, 0.09);
+    }
+
+    .server-editor,
+    .social-editor,
+    .banner-editor {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .server-editor {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .editor-card {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.16);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .editor-card h4 {
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .file-row {
+      display: grid;
+      gap: 9px;
+    }
+
+    .source-preview {
+      min-height: 24px;
+      color: rgba(247,241,231,0.58);
+      font-size: 0.8rem;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      color: #12100a;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      box-shadow: 0 14px 32px rgba(217, 169, 58, 0.22);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.06);
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: none;
+    }
+
+    .btn.danger {
+      background: rgba(255, 93, 104, 0.16);
+      color: #ffd5da;
+      border: 1px solid rgba(255, 93, 104, 0.34);
+      box-shadow: none;
+    }
+
+    .login-screen {
+      min-height: 100vh;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      position: relative;
+      z-index: 12;
+    }
+
+    .login-screen.visible {
+      display: grid;
+    }
+
+    .login-card {
+      width: min(460px, 100%);
+      border-radius: 28px;
+      padding: 28px;
+      background: rgba(9, 11, 20, 0.96);
+      border: 1px solid rgba(217, 169, 58, 0.24);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .login-card h2 {
+      color: var(--gold-light);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .login-card p {
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .message {
+      margin-top: 12px;
+      color: var(--danger);
+      min-height: 22px;
+      font-weight: 700;
+    }
+
+    .save-message {
+      color: var(--success);
+      font-weight: 800;
+      margin-left: 6px;
+      min-height: 24px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1460px) {
+      .side-banner {
+        width: clamp(120px, 10vw, 170px);
+      }
+
+      .page {
+        width: min(900px, calc(100% - 32px));
+      }
+    }
+
+    @media (max-width: 1180px) {
+      .side-banner {
+        display: none;
+      }
+
+      .page {
+        width: min(1080px, calc(100% - 24px));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .social-grid,
+      .server-grid,
+      .server-editor,
+      .social-editor,
+      .banner-editor {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 20px, 1180px);
+        padding-top: 22px;
+      }
+
+      .logo-frame {
+        width: 132px;
+        height: 132px;
+      }
+
+      .divider {
+        gap: 9px;
+      }
+
+      .divider-title {
+        padding: 9px 12px;
+        font-size: 0.74rem;
+        letter-spacing: 0.08em;
+      }
+
+      .social-grid,
+      .server-grid,
+      .form-grid,
+      .server-editor,
+      .social-editor,
+      .banner-editor {
+        grid-template-columns: 1fr;
+      }
+
+      .admin-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img id="imageBackground" class="media-background" alt="" />
+  <video id="videoBackground" class="video-background" autoplay muted loop playsinline></video>
+  <div class="animated-glow" id="animatedGlow"></div>
+  <div class="background-overlay" id="backgroundOverlay"></div>
+
+  <aside id="leftBanner" class="side-banner left"></aside>
+  <aside id="rightBanner" class="side-banner right"></aside>
+
+  <main id="publicSite" class="page">
+    <section class="hero">
+      <div class="logo-frame">
+        <img id="mainLogo" class="main-logo" alt="Salvo Metin2 Topluluğu Logo" />
+      </div>
+      <h1 id="siteTitle">Salvo <span>Metin2 Topluluğu</span></h1>
+      <p id="siteSubtitle">Topluluğun sosyal medya hesapları ve oynanan Metin2 sunucuları tek premium sayfada.</p>
+    </section>
+
+    <div class="divider">
+      <div class="divider-title">Sosyal Medya Hesaplarım</div>
+    </div>
+
+    <section class="section-card">
+      <div id="socialGrid" class="grid social-grid"></div>
+    </section>
+
+    <div class="divider">
+      <div class="divider-title">Oynadığım Serverlar</div>
+    </div>
+
+    <section class="section-card">
+      <div id="serverGrid" class="grid server-grid"></div>
+    </section>
+
+    <footer class="site-footer">Tüm hakları saklıdır.</footer>
+  </main>
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <h2>Admin Girişi</h2>
+      <p>Site içeriklerini güncellemek için yönetici şifresini gir.</p>
+      <div class="field">
+        <label for="passwordInput">Şifre</label>
+        <input id="passwordInput" type="password" placeholder="Şifre gir" autocomplete="current-password" />
+      </div>
+      <div class="actions" style="justify-content:center;">
+        <button class="btn" id="loginButton">Giriş Yap</button>
+        <button class="btn secondary" id="backPublicButton">Siteye Dön</button>
+      </div>
+      <div id="loginMessage" class="message"></div>
+    </div>
+  </section>
+
+  <section id="adminPanel" class="admin-panel">
+    <div class="admin-box">
+      <div class="admin-head">
+        <div>
+          <h2>Yönetim Paneli</h2>
+          <p>Logo, arka plan, sosyal medya, server kutuları ve sağ/sol köşe bannerlarını buradan düzenleyebilirsin.</p>
+        </div>
+        <button class="btn secondary" id="logoutButton">Çıkış Yap</button>
+      </div>
+
+      <div class="admin-grid">
+        <div class="admin-section">
+          <h3>1. Ana Logo ve Başlık</h3>
+          <div class="form-grid">
+            <div class="field">
+              <label for="adminLogoUrl">Logo URL</label>
+              <input id="adminLogoUrl" placeholder="https://.../logo.png" />
+            </div>
+            <div class="field">
+              <label for="adminLogoFile">Bilgisayardan Logo Seç</label>
+              <input id="adminLogoFile" type="file" accept="image/*" />
+              <div id="adminLogoPreview" class="source-preview"></div>
+            </div>
+            <div class="field">
+              <label for="adminTitle">Site Başlığı</label>
+              <input id="adminTitle" placeholder="Salvo Metin2 Topluluğu" />
+            </div>
+            <div class="field">
+              <label for="adminSubtitle">Alt Açıklama</label>
+              <input id="adminSubtitle" placeholder="Kısa açıklama" />
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-section">
+          <h3>2. Hareketli Arka Plan</h3>
+          <div class="form-grid">
+            <div class="field">
+              <label for="backgroundType">Arka Plan Tipi</label>
+              <select id="backgroundType">
+                <option value="premium">Premium animasyon</option>
+                <option value="image">Görsel / GIF</option>
+                <option value="video">Video</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="backgroundOverlayRange">Karanlık Filtre</label>
+              <input id="backgroundOverlayRange" type="range" min="0" max="85" step="1" />
+              <div id="overlayValue" class="source-preview"></div>
+            </div>
+            <div class="field">
+              <label for="backgroundImageUrl">Arka Plan Görsel/GIF URL</label>
+              <input id="backgroundImageUrl" placeholder="https://.../arkaplan.gif" />
+            </div>
+            <div class="field">
+              <label for="backgroundImageFile">Bilgisayardan Görsel/GIF Seç</label>
+              <input id="backgroundImageFile" type="file" accept="image/*" />
+              <div id="backgroundImagePreview" class="source-preview"></div>
+            </div>
+            <div class="field">
+              <label for="backgroundVideoUrl">Arka Plan Video URL</label>
+              <input id="backgroundVideoUrl" placeholder="https://.../video.mp4" />
+            </div>
+            <div class="field">
+              <label for="backgroundVideoFile">Bilgisayardan Video Seç</label>
+              <input id="backgroundVideoFile" type="file" accept="video/*" />
+              <div id="backgroundVideoPreview" class="source-preview"></div>
+            </div>
+          </div>
+          <p class="hint">Not: Fotoğraf ve GIF dosyaları genelde sorunsuz kaydolur. Çok büyük video dosyalarında tarayıcı kayıt limiti dolarsa video URL kullanman daha sağlıklı olur.</p>
+        </div>
+
+        <div class="admin-section">
+          <h3>3. Sosyal Medya Hesapları</h3>
+          <div id="socialEditor" class="social-editor"></div>
+        </div>
+
+        <div class="admin-section">
+          <h3>4. Oynadığım Serverlar</h3>
+          <div id="serverEditor" class="server-editor"></div>
+        </div>
+
+        <div class="admin-section">
+          <h3>5. Sağ / Sol Köşe Server Bannerları</h3>
+          <div id="bannerEditor" class="banner-editor"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="saveButton">Değişiklikleri Kaydet</button>
+        <button class="btn secondary" id="previewButton">Siteyi Önizle</button>
+        <button class="btn danger" id="resetButton">Varsayılana Sıfırla</button>
+        <span id="saveMessage" class="save-message"></span>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const API_BASE = "/.netlify/functions";
+    const TOKEN_KEY = "salvo-admin-token";
+
+    const defaultLogo = `data:image/svg+xml,${encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+        <defs>
+          <radialGradient id="g" cx="50%" cy="35%" r="70%">
+            <stop offset="0" stop-color="#ffe08a"/>
+            <stop offset="0.45" stop-color="#d9a93a"/>
+            <stop offset="1" stop-color="#3b1118"/>
+          </radialGradient>
+        </defs>
+        <rect width="300" height="300" rx="150" fill="#080a12"/>
+        <circle cx="150" cy="150" r="126" fill="url(#g)" opacity="0.95"/>
+        <circle cx="150" cy="150" r="104" fill="#0b0d17" stroke="#ffe08a" stroke-width="5"/>
+        <text x="150" y="139" text-anchor="middle" font-size="76" font-family="Arial Black, Arial" fill="#ffe08a">S</text>
+        <text x="150" y="189" text-anchor="middle" font-size="28" font-family="Arial Black, Arial" fill="#f5f0e8">METIN2</text>
+      </svg>`)}`.trim();
+
+    const defaultData = {
+      logoSrc: defaultLogo,
+      logoSourceLabel: "Varsayılan logo",
+      title: "Salvo Metin2 Topluluğu",
+      subtitle: "Topluluğun sosyal medya hesapları ve oynanan Metin2 sunucuları tek premium sayfada.",
+      background: {
+        type: "premium",
+        imageSrc: "",
+        imageSourceLabel: "",
+        videoSrc: "",
+        videoSourceLabel: "",
+        overlay: 52
+      },
+      socials: [
+        { key: "tiktok", name: "TikTok", url: "https://www.tiktok.com/" },
+        { key: "twitch", name: "Twitch", url: "https://www.twitch.tv/" },
+        { key: "kick", name: "Kick", url: "https://kick.com/" },
+        { key: "youtube", name: "YouTube", url: "https://www.youtube.com/" }
+      ],
+      servers: [
+        { name: "Server Alanı 1", logoSrc: "", logoSourceLabel: "", url: "" },
+        { name: "Server Alanı 2", logoSrc: "", logoSourceLabel: "", url: "" },
+        { name: "Server Alanı 3", logoSrc: "", logoSourceLabel: "", url: "" },
+        { name: "Server Alanı 4", logoSrc: "", logoSourceLabel: "", url: "" },
+        { name: "Server Alanı 5", logoSrc: "", logoSourceLabel: "", url: "" }
+      ],
+      sideBanners: {
+        left: { name: "Sol Server Banner", imageSrc: "", imageSourceLabel: "", url: "" },
+        right: { name: "Sağ Server Banner", imageSrc: "", imageSourceLabel: "", url: "" }
+      }
+    };
+
+    const icons = {
+      tiktok: `
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path fill="#ffffff" d="M39 8c1.1 8.5 5.9 13.4 14 14.1v10.2c-5.1.2-9.8-1.4-14-4.5v17.3C39 55.2 31.9 61 23.5 61 15.9 61 9 55.1 9 46.5 9 37 16.5 31.4 26 32.1v10.7c-4.1-.7-7.1 1-7.1 4.1 0 2.7 2.1 4.6 4.9 4.6 3.2 0 5.1-2 5.1-6.3V8h10.1z"/>
+          <path fill="#25f4ee" opacity="0.65" d="M35 8c1 9.9 6.6 16.1 16 17v3.2C44.8 27.5 40 25 35 20.5V8zM23.8 55.6c-7.8 0-13.2-5.7-13.2-12.6 0-1.2.1-2.3.4-3.3-1.3 1.9-2 4.2-2 6.8C9 55.1 15.9 61 23.5 61c5.9 0 11.2-2.9 13.7-8-3.1 1.8-7.5 2.6-13.4 2.6z"/>
+          <path fill="#fe2c55" opacity="0.72" d="M39 8c.8 6.1 3.5 10.4 8 12.5v3.2c-5.9-2-9.8-6.9-11-15.7h3zM26 32.1v3.8c-8.3-.5-15.4 4.6-15.4 13.3 0 2.8.9 5.4 2.4 7.4C10.5 54.1 9 50.7 9 46.5 9 37 16.5 31.4 26 32.1z"/>
+        </svg>`,
+      twitch: `
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <path fill="#9146ff" d="M10 8h45v31L43 51H31l-8 8h-8v-8H4V20l6-12z"/>
+          <path fill="#ffffff" d="M16 14h33v22l-7 7H30l-8 8v-8h-6V14z"/>
+          <path fill="#19132f" d="M27 23h5v13h-5V23zm13 0h5v13h-5V23z"/>
+        </svg>`,
+      kick: `
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect x="8" y="8" width="48" height="48" rx="10" fill="#53fc18"/>
+          <path fill="#050505" d="M18 16h12v13h5l8-13h13L44 32l13 16H43l-8-12h-5v12H18V16z"/>
+        </svg>`,
+      youtube: `
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect x="6" y="16" width="52" height="32" rx="10" fill="#ff0033"/>
+          <path fill="#ffffff" d="M27 24l16 8-16 8V24z"/>
+        </svg>`
+    };
+
+    let data = cloneDefault();
+
+    const publicSite = document.getElementById("publicSite");
+    const loginScreen = document.getElementById("loginScreen");
+    const adminPanel = document.getElementById("adminPanel");
+
+    function cloneDefault() {
+      return JSON.parse(JSON.stringify(defaultData));
+    }
+
+    function mergeData(saved) {
+      if (!saved || typeof saved !== "object") return cloneDefault();
+      return {
+        ...cloneDefault(),
+        ...saved,
+        background: { ...cloneDefault().background, ...(saved.background || {}) },
+        socials: saved.socials || cloneDefault().socials,
+        servers: saved.servers || cloneDefault().servers,
+        sideBanners: {
+          ...cloneDefault().sideBanners,
+          ...(saved.sideBanners || {}),
+          left: { ...cloneDefault().sideBanners.left, ...((saved.sideBanners || {}).left || {}) },
+          right: { ...cloneDefault().sideBanners.right, ...((saved.sideBanners || {}).right || {}) }
+        }
+      };
+    }
+
+    async function loadData() {
+      try {
+        const response = await fetch(`${API_BASE}/get-config`, { cache: "no-store" });
+        if (!response.ok) throw new Error("Ayarlar alınamadı");
+        const saved = await response.json();
+        return mergeData(saved);
+      } catch (error) {
+        console.warn("Netlify ayarları okunamadı, varsayılan site açıldı:", error);
+        return cloneDefault();
+      }
+    }
+
+    function getAdminToken() {
+      return sessionStorage.getItem(TOKEN_KEY) || "";
+    }
+
+    async function saveData() {
+      const token = getAdminToken();
+      if (!token) {
+        alert("Admin oturumu yok. Tekrar giriş yap.");
+        return false;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/save-config`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          const message = await response.text();
+          throw new Error(message || "Kayıt başarısız");
+        }
+        return true;
+      } catch (error) {
+        alert("Kaydetme başarısız oldu. Netlify Functions çalışıyor mu ve şifre doğru mu kontrol et. " + error.message);
+        return false;
+      }
+    }
+
+    function renderPublic() {
+      document.getElementById("mainLogo").src = data.logoSrc || defaultLogo;
+      document.getElementById("siteTitle").innerHTML = formatTitle(data.title || "Salvo Metin2 Topluluğu");
+      document.getElementById("siteSubtitle").textContent = data.subtitle || "";
+
+      renderBackground();
+      renderSideBanner("left");
+      renderSideBanner("right");
+
+      const socialGrid = document.getElementById("socialGrid");
+      socialGrid.innerHTML = data.socials.map(item => `
+        <article class="tile" title="${escapeHtml(item.name)} hesabına git">
+          <a class="button-cover" href="${safeUrl(item.url)}" target="_blank" rel="noopener" aria-label="${escapeAttr(item.name)} hesabına git"></a>
+          <div class="platform-icon">${icons[item.key] || icons.youtube}</div>
+          <div class="tile-title">${escapeHtml(item.name)}</div>
+          <div class="tile-subtitle">Logoya basarak hesaba git</div>
+        </article>
+      `).join("");
+
+      const serverGrid = document.getElementById("serverGrid");
+      serverGrid.innerHTML = data.servers.map((item, index) => {
+        const logo = item.logoSrc
+          ? `<img src="${escapeAttr(item.logoSrc)}" alt="${escapeAttr(item.name || "Server")}" />`
+          : `<span>LOGO<br>${index + 1}</span>`;
+        const body = `
+          <div class="server-logo ${item.logoSrc ? "" : "empty"}">${logo}</div>
+          <div class="tile-title">${escapeHtml(item.name || "Server Alanı")}</div>
+          <div class="tile-subtitle">${item.url ? "Servera git" : "Logo, isim ve link eklenebilir"}</div>
+        `;
+        if (item.url) {
+          return `<article class="tile"><a class="button-cover" href="${safeUrl(item.url)}" target="_blank" rel="noopener" aria-label="${escapeAttr(item.name)} serverına git"></a>${body}</article>`;
+        }
+        return `<article class="tile">${body}</article>`;
+      }).join("");
+    }
+
+    function renderBackground() {
+      const imageBg = document.getElementById("imageBackground");
+      const videoBg = document.getElementById("videoBackground");
+      const glow = document.getElementById("animatedGlow");
+      const overlay = document.getElementById("backgroundOverlay");
+
+      imageBg.style.display = "none";
+      videoBg.style.display = "none";
+      videoBg.pause();
+      glow.style.display = "block";
+
+      const overlayAmount = Number(data.background.overlay ?? 52) / 100;
+      overlay.style.background = `rgba(0, 0, 0, ${overlayAmount})`;
+
+      if (data.background.type === "image" && data.background.imageSrc) {
+        imageBg.src = data.background.imageSrc;
+        imageBg.style.display = "block";
+        glow.style.display = "none";
+      }
+
+      if (data.background.type === "video" && data.background.videoSrc) {
+        videoBg.src = data.background.videoSrc;
+        videoBg.style.display = "block";
+        glow.style.display = "none";
+        videoBg.play().catch(() => {});
+      }
+    }
+
+    function renderSideBanner(position) {
+      const target = document.getElementById(position === "left" ? "leftBanner" : "rightBanner");
+      const item = data.sideBanners[position];
+      const content = item.imageSrc
+        ? `<img src="${escapeAttr(item.imageSrc)}" alt="${escapeAttr(item.name || "Server Banner")}" />`
+        : `<div class="placeholder">${position === "left" ? "Sol" : "Sağ"}<br>Server<br>Banner</div>`;
+      const caption = `<div class="banner-caption">${escapeHtml(item.name || "Server Banner")}</div>`;
+      const href = item.url ? safeUrl(item.url) : "#";
+      target.innerHTML = `<a href="${href}" target="${item.url ? "_blank" : "_self"}" rel="noopener">${content}${caption}</a>`;
+    }
+
+    function formatTitle(title) {
+      const clean = escapeHtml(title);
+      const words = clean.split(" ");
+      if (words.length <= 1) return clean;
+      return `${words[0]} <span>${words.slice(1).join(" ")}</span>`;
+    }
+
+    function renderAdmin() {
+      document.getElementById("adminLogoUrl").value = isDataUrl(data.logoSrc) ? "" : (data.logoSrc || "");
+      document.getElementById("adminLogoPreview").textContent = data.logoSourceLabel || sourceText(data.logoSrc);
+      document.getElementById("adminTitle").value = data.title || "";
+      document.getElementById("adminSubtitle").value = data.subtitle || "";
+
+      document.getElementById("backgroundType").value = data.background.type || "premium";
+      document.getElementById("backgroundOverlayRange").value = Number(data.background.overlay ?? 52);
+      document.getElementById("overlayValue").textContent = `%${Number(data.background.overlay ?? 52)} karanlık filtre`;
+      document.getElementById("backgroundImageUrl").value = isDataUrl(data.background.imageSrc) ? "" : (data.background.imageSrc || "");
+      document.getElementById("backgroundImagePreview").textContent = data.background.imageSourceLabel || sourceText(data.background.imageSrc);
+      document.getElementById("backgroundVideoUrl").value = isDataUrl(data.background.videoSrc) ? "" : (data.background.videoSrc || "");
+      document.getElementById("backgroundVideoPreview").textContent = data.background.videoSourceLabel || sourceText(data.background.videoSrc);
+
+      const socialEditor = document.getElementById("socialEditor");
+      socialEditor.innerHTML = data.socials.map((item, index) => `
+        <div class="editor-card">
+          <h4>${escapeHtml(item.name)}</h4>
+          <div class="field">
+            <label>Platform İsmi</label>
+            <input data-social-index="${index}" data-field="name" value="${escapeAttr(item.name)}" />
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label>Yönlendirme Linki</label>
+            <input data-social-index="${index}" data-field="url" value="${escapeAttr(item.url)}" placeholder="https://..." />
+          </div>
+        </div>
+      `).join("");
+
+      const serverEditor = document.getElementById("serverEditor");
+      serverEditor.innerHTML = data.servers.map((item, index) => `
+        <div class="editor-card">
+          <h4>Server Alanı ${index + 1}</h4>
+          <div class="field">
+            <label>Server İsmi</label>
+            <input data-server-index="${index}" data-field="name" value="${escapeAttr(item.name || "")}" placeholder="Server adı" />
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label>Server Linki</label>
+            <input data-server-index="${index}" data-field="url" value="${escapeAttr(item.url || "")}" placeholder="https://..." />
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label>Logo URL</label>
+            <input data-server-index="${index}" data-field="logoUrl" value="${escapeAttr(isDataUrl(item.logoSrc) ? "" : (item.logoSrc || ""))}" placeholder="https://.../server-logo.png" />
+          </div>
+          <div class="field" style="margin-top:10px;">
+            <label>Bilgisayardan Logo Seç</label>
+            <input type="file" accept="image/*" data-server-file-index="${index}" />
+            <div class="source-preview">${escapeHtml(item.logoSourceLabel || sourceText(item.logoSrc))}</div>
+          </div>
+        </div>
+      `).join("");
+
+      const bannerEditor = document.getElementById("bannerEditor");
+      bannerEditor.innerHTML = ["left", "right"].map(position => {
+        const item = data.sideBanners[position];
+        const label = position === "left" ? "Sol Köşe Banner" : "Sağ Köşe Banner";
+        return `
+          <div class="editor-card">
+            <h4>${label}</h4>
+            <div class="field">
+              <label>Banner İsmi</label>
+              <input data-banner-position="${position}" data-field="name" value="${escapeAttr(item.name || "")}" placeholder="${label}" />
+            </div>
+            <div class="field" style="margin-top:10px;">
+              <label>Banner Linki</label>
+              <input data-banner-position="${position}" data-field="url" value="${escapeAttr(item.url || "")}" placeholder="https://..." />
+            </div>
+            <div class="field" style="margin-top:10px;">
+              <label>Banner Görsel URL</label>
+              <input data-banner-position="${position}" data-field="imageUrl" value="${escapeAttr(isDataUrl(item.imageSrc) ? "" : (item.imageSrc || ""))}" placeholder="https://.../banner.gif" />
+            </div>
+            <div class="field" style="margin-top:10px;">
+              <label>Bilgisayardan Banner Seç</label>
+              <input type="file" accept="image/*" data-banner-file-position="${position}" />
+              <div class="source-preview">${escapeHtml(item.imageSourceLabel || sourceText(item.imageSrc))}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      bindDynamicFileInputs();
+    }
+
+    function bindDynamicFileInputs() {
+      document.querySelectorAll("[data-server-file-index]").forEach(input => {
+        input.addEventListener("change", async event => {
+          const index = Number(event.currentTarget.dataset.serverFileIndex);
+          const file = event.currentTarget.files[0];
+          if (!file) return;
+          data.servers[index].logoSrc = await fileToDataUrl(file);
+          data.servers[index].logoSourceLabel = `Bilgisayardan seçildi: ${file.name}`;
+          renderAdmin();
+        });
+      });
+
+      document.querySelectorAll("[data-banner-file-position]").forEach(input => {
+        input.addEventListener("change", async event => {
+          const position = event.currentTarget.dataset.bannerFilePosition;
+          const file = event.currentTarget.files[0];
+          if (!file) return;
+          data.sideBanners[position].imageSrc = await fileToDataUrl(file);
+          data.sideBanners[position].imageSourceLabel = `Bilgisayardan seçildi: ${file.name}`;
+          renderAdmin();
+        });
+      });
+    }
+
+    function collectAdminData() {
+      const logoUrl = document.getElementById("adminLogoUrl").value.trim();
+      if (logoUrl) {
+        data.logoSrc = logoUrl;
+        data.logoSourceLabel = "URL kullanılıyor";
+      }
+
+      data.title = document.getElementById("adminTitle").value.trim() || "Salvo Metin2 Topluluğu";
+      data.subtitle = document.getElementById("adminSubtitle").value.trim();
+
+      data.background.type = document.getElementById("backgroundType").value;
+      data.background.overlay = Number(document.getElementById("backgroundOverlayRange").value);
+
+      const bgImageUrl = document.getElementById("backgroundImageUrl").value.trim();
+      if (bgImageUrl) {
+        data.background.imageSrc = bgImageUrl;
+        data.background.imageSourceLabel = "URL kullanılıyor";
+      }
+
+      const bgVideoUrl = document.getElementById("backgroundVideoUrl").value.trim();
+      if (bgVideoUrl) {
+        data.background.videoSrc = bgVideoUrl;
+        data.background.videoSourceLabel = "URL kullanılıyor";
+      }
+
+      document.querySelectorAll("[data-social-index]").forEach(input => {
+        const index = Number(input.dataset.socialIndex);
+        const field = input.dataset.field;
+        data.socials[index][field] = input.value.trim();
+      });
+
+      document.querySelectorAll("[data-server-index]").forEach(input => {
+        const index = Number(input.dataset.serverIndex);
+        const field = input.dataset.field;
+        const value = input.value.trim();
+
+        if (field === "logoUrl") {
+          if (value) {
+            data.servers[index].logoSrc = value;
+            data.servers[index].logoSourceLabel = "URL kullanılıyor";
+          }
+        } else {
+          data.servers[index][field] = value;
+        }
+      });
+
+      document.querySelectorAll("[data-banner-position]").forEach(input => {
+        const position = input.dataset.bannerPosition;
+        const field = input.dataset.field;
+        const value = input.value.trim();
+
+        if (field === "imageUrl") {
+          if (value) {
+            data.sideBanners[position].imageSrc = value;
+            data.sideBanners[position].imageSourceLabel = "URL kullanılıyor";
+          }
+        } else {
+          data.sideBanners[position][field] = value;
+        }
+      });
+    }
+
+    async function fileToDataUrl(file) {
+      const token = getAdminToken();
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      });
+
+      if (!token) {
+        alert("Dosya yüklemek için admin girişi yapman gerekiyor.");
+        return dataUrl;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        alert("Bu dosya büyük. Netlify Function limitine takılabilir. Büyük video/GIF için URL kullanman daha sağlıklı.");
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/upload-file`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            filename: file.name,
+            contentType: file.type || "application/octet-stream",
+            dataUrl
+          })
+        });
+
+        if (!response.ok) {
+          const message = await response.text();
+          throw new Error(message || "Dosya yüklenemedi");
+        }
+
+        const result = await response.json();
+        return result.url;
+      } catch (error) {
+        alert("Dosya Netlify tarafına yüklenemedi. Küçük görsel dene veya URL kullan. Hata: " + error.message);
+        return dataUrl;
+      }
+    }
+
+    function isDataUrl(value) {
+      return typeof value === "string" && value.startsWith("data:");
+    }
+
+    function sourceText(value) {
+      if (!value) return "Henüz dosya veya URL seçilmedi.";
+      if (isDataUrl(value)) return "Bilgisayardan dosya seçildi.";
+      return "URL kullanılıyor.";
+    }
+
+    function safeUrl(value) {
+      const url = String(value || "").trim();
+      if (!url) return "#";
+      if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("mailto:") || url.startsWith("tel:") || url.startsWith("data:")) {
+        return escapeAttr(url);
+      }
+      return escapeAttr("https://" + url);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replaceAll("`", "&#096;");
+    }
+
+    function showPublic() {
+      publicSite.classList.remove("hidden");
+      loginScreen.classList.remove("visible");
+      adminPanel.classList.remove("visible");
+      document.getElementById("leftBanner").classList.remove("hidden");
+      document.getElementById("rightBanner").classList.remove("hidden");
+      if (location.hash === "#admin") history.replaceState(null, "", location.pathname + location.search);
+      renderPublic();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showLogin() {
+      publicSite.classList.add("hidden");
+      adminPanel.classList.remove("visible");
+      loginScreen.classList.add("visible");
+      document.getElementById("leftBanner").classList.add("hidden");
+      document.getElementById("rightBanner").classList.add("hidden");
+      document.getElementById("passwordInput").focus();
+    }
+
+    function showAdmin() {
+      publicSite.classList.add("hidden");
+      loginScreen.classList.remove("visible");
+      adminPanel.classList.add("visible");
+      document.getElementById("leftBanner").classList.add("hidden");
+      document.getElementById("rightBanner").classList.add("hidden");
+      renderAdmin();
+    }
+
+    document.getElementById("adminLogoFile").addEventListener("change", async event => {
+      const file = event.currentTarget.files[0];
+      if (!file) return;
+      data.logoSrc = await fileToDataUrl(file);
+      data.logoSourceLabel = `Bilgisayardan seçildi: ${file.name}`;
+      document.getElementById("adminLogoPreview").textContent = data.logoSourceLabel;
+    });
+
+    document.getElementById("backgroundImageFile").addEventListener("change", async event => {
+      const file = event.currentTarget.files[0];
+      if (!file) return;
+      data.background.imageSrc = await fileToDataUrl(file);
+      data.background.imageSourceLabel = `Bilgisayardan seçildi: ${file.name}`;
+      data.background.type = "image";
+      renderAdmin();
+    });
+
+    document.getElementById("backgroundVideoFile").addEventListener("change", async event => {
+      const file = event.currentTarget.files[0];
+      if (!file) return;
+      data.background.videoSrc = await fileToDataUrl(file);
+      data.background.videoSourceLabel = `Bilgisayardan seçildi: ${file.name}`;
+      data.background.type = "video";
+      renderAdmin();
+    });
+
+    document.getElementById("backgroundOverlayRange").addEventListener("input", event => {
+      document.getElementById("overlayValue").textContent = `%${event.currentTarget.value} karanlık filtre`;
+    });
+
+    document.getElementById("loginButton").addEventListener("click", async () => {
+      const password = document.getElementById("passwordInput").value;
+      const loginMessage = document.getElementById("loginMessage");
+      loginMessage.textContent = "Giriş kontrol ediliyor...";
+
+      try {
+        const response = await fetch(`${API_BASE}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ password })
+        });
+
+        if (!response.ok) throw new Error("Şifre hatalı veya Netlify Function çalışmıyor.");
+        const result = await response.json();
+        sessionStorage.setItem(TOKEN_KEY, result.token);
+        loginMessage.textContent = "";
+        showAdmin();
+      } catch (error) {
+        loginMessage.textContent = error.message;
+      }
+    });
+
+    document.getElementById("passwordInput").addEventListener("keydown", event => {
+      if (event.key === "Enter") document.getElementById("loginButton").click();
+    });
+
+    document.getElementById("backPublicButton").addEventListener("click", showPublic);
+
+    document.getElementById("logoutButton").addEventListener("click", () => {
+      sessionStorage.removeItem(TOKEN_KEY);
+      showPublic();
+    });
+
+    document.getElementById("saveButton").addEventListener("click", async () => {
+      collectAdminData();
+      const message = document.getElementById("saveMessage");
+      message.textContent = "Kaydediliyor...";
+      const saved = await saveData();
+      if (!saved) {
+        message.textContent = "";
+        return;
+      }
+
+      renderPublic();
+      renderAdmin();
+      message.textContent = "Kaydedildi. Artık herkeste görünür.";
+      setTimeout(() => message.textContent = "", 2200);
+    });
+
+    document.getElementById("previewButton").addEventListener("click", () => {
+      collectAdminData();
+      renderPublic();
+      publicSite.classList.remove("hidden");
+      document.getElementById("leftBanner").classList.remove("hidden");
+      document.getElementById("rightBanner").classList.remove("hidden");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("resetButton").addEventListener("click", async () => {
+      const confirmed = confirm("Tüm düzenlemeler sıfırlansın mı?");
+      if (!confirmed) return;
+      data = cloneDefault();
+      const saved = await saveData();
+      if (!saved) return;
+      renderPublic();
+      renderAdmin();
+      document.getElementById("saveMessage").textContent = "Varsayılana döndürüldü.";
+    });
+
+    window.addEventListener("hashchange", () => {
+      if (location.hash === "#admin") {
+        if (getAdminToken()) showAdmin();
+        else showLogin();
+      } else {
+        showPublic();
+      }
+    });
+
+    async function init() {
+      data = await loadData();
+      renderPublic();
+      if (location.hash === "#admin") {
+        if (getAdminToken()) showAdmin();
+        else showLogin();
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
