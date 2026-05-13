@@ -1,5 +1,9 @@
 import crypto from 'node:crypto';
 
+// Netlify API Token ve SiteID
+export const siteID = "admirable-torte-ed4c91"; // Buraya Netlify'deki siteID'yi yazdın
+export const token = "nfp_BFFsTWycEz4pmyR9EEvTsuTp1XXEds2Kae3f"; // Buraya kopyaladığın API token'ı yazdın
+
 export const jsonHeaders = {
   'Content-Type': 'application/json; charset=utf-8',
   'Cache-Control': 'no-store'
